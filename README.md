@@ -3,7 +3,7 @@ Explains the structure of an NBT file.
 
 If you want a C# library that is actually useful, use [fNBT](https://github.com/mstefarov/fNbt).
 I made this primarily for fun and as a portfolio booster.
-It currently tests notch's original hello_world.nbt and bigtest.nbt files, which are downloaded during runtime, but it should work with basically any nbt file you throw at it.
+It currently tests notch's original hello_world.nbt and bigtest.nbt files (downloaded during runtime), but it should work with basically any nbt file you throw at it.
 
 ### Resources used during development
 
