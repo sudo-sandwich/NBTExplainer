@@ -12,14 +12,17 @@ namespace NBTExplainer {
         public static void Main(string[] args) {
             StringBuilder prettyPrinter = new StringBuilder();
 
+            /*
             // download test files
             using (WebClient client = new WebClient()) {
                 client.DownloadFile("https://raw.github.com/Dav1dde/nbd/master/test/hello_world.nbt", "hello_world.nbt");
                 client.DownloadFile("https://raw.github.com/Dav1dde/nbd/master/test/bigtest.nbt", "bigtest.nbt");
             }
+            */
 
+            /*
             // hello_world.nbt test
-            NbtTag helloWorld = NbtParser.Read("hello_world.nbt", Endian.Big);
+            NbtTag helloWorld = NbtParser.ReadFromFile("hello_world.nbt", Endian.Big);
             Console.WriteLine();
 
             helloWorld.PrettyPrint(prettyPrinter, "  ", 0);
@@ -29,10 +32,21 @@ namespace NBTExplainer {
             prettyPrinter.Clear();
 
             // bigtest.nbt test
-            NbtTag bigTest = NbtParser.Read("bigtest.nbt", Endian.Big);
+            NbtTag bigTest = NbtParser.ReadFromFile("bigtest.nbt", Endian.Big);
             Console.WriteLine();
 
             bigTest.PrettyPrint(prettyPrinter, "  ", 0);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(prettyPrinter.ToString());
+            Console.ForegroundColor = ConsoleColor.White;
+            prettyPrinter.Clear();
+            */
+
+            // level.dat test
+            NbtTag level = NbtParser.ReadFromFile("level.dat", Endian.Little);
+            Console.WriteLine();
+
+            level.PrettyPrint(prettyPrinter, "  ", 0);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(prettyPrinter.ToString());
             Console.ForegroundColor = ConsoleColor.White;

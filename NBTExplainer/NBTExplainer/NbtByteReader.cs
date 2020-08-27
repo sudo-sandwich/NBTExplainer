@@ -29,55 +29,17 @@ namespace NBTExplainer {
 
         // gets the next byte, then interprets it as a tag type and returns
         public TagType ReadTagType() {
-            byte tagType = Input.ReadByte();
+            byte nextByte = Input.ReadByte();
 
 #if DEBUG
-            Console.WriteLine(tagType.ToString("X2"));
+            Console.WriteLine(nextByte.ToString("X2"));
 #endif
 
             TagType retValue;
-            switch (tagType) {
-                case 0:
-                    retValue = TagType.End;
-                    break;
-                case 1:
-                    retValue = TagType.Byte;
-                    break;
-                case 2:
-                    retValue = TagType.Short;
-                    break;
-                case 3:
-                    retValue = TagType.Int;
-                    break;
-                case 4:
-                    retValue = TagType.Long;
-                    break;
-                case 5:
-                    retValue = TagType.Float;
-                    break;
-                case 6:
-                    retValue = TagType.Double;
-                    break;
-                case 7:
-                    retValue = TagType.ByteArray;
-                    break;
-                case 8:
-                    retValue = TagType.String;
-                    break;
-                case 9:
-                    retValue = TagType.List;
-                    break;
-                case 10:
-                    retValue = TagType.Compound;
-                    break;
-                case 11:
-                    retValue = TagType.IntArray;
-                    break;
-                case 12:
-                    retValue = TagType.LongArray;
-                    break;
-                default:
-                    throw new Exception("Next byte does not match any known tag types.");
+            if (Enum.IsDefined(typeof(TagType), nextByte)) {
+                retValue = (TagType)nextByte;
+            } else {
+                throw new Exception("Next byte does not match any known tag types.");
             }
 
 #if DEBUG

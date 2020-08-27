@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace NBTExplainer {
     public static class NbtParser {
         // parses an nbt file into an NbtTag object, either TAG_Compound or TAG_List
-        public static NbtTag Read(string filename, Endian endianness) {
+        public static NbtTag ReadFromFile(string filename, Endian endianness) {
 #if DEBUG
             Console.WriteLine("Original bytes:");
             foreach (byte b in File.ReadAllBytes(filename)) {
@@ -41,7 +41,7 @@ namespace NBTExplainer {
             }
         }
 
-        private static NbtTag ReadFromStream(Stream inputStream, Endian endianness) {
+        public static NbtTag ReadFromStream(Stream inputStream, Endian endianness) {
             NbtByteReader reader = new NbtByteReader(inputStream, endianness);
 
             TagType firstTagType = reader.ReadTagType();
@@ -106,7 +106,7 @@ namespace NBTExplainer {
         }
 
         // get the next value prefixed by tag type (1 byte) and name length (unsigned short, 2 bytes)
-        private static NbtTag ParseNextValueType(NbtByteReader reader) {
+        public static NbtTag ParseNextValueType(NbtByteReader reader) {
             TagType nextTagType = reader.ReadTagType();
 
             switch (nextTagType) {
@@ -140,7 +140,7 @@ namespace NBTExplainer {
         }
 
         // get the next non prefixed value. this should only happen in elements of TAG_List
-        private static NbtTag ParseNextValueType(NbtByteReader reader, TagType nextTagType) {
+        public static NbtTag ParseNextValueType(NbtByteReader reader, TagType nextTagType) {
             switch (nextTagType) {
                 case TagType.Byte:
                     return new NbtByte("", reader.ReadSByte());
@@ -172,13 +172,13 @@ namespace NBTExplainer {
         }
 
         // strings are prefixed by an unsigned short signifying the length of the string
-        private static string ParseString(NbtByteReader reader) {
+        public static string ParseString(NbtByteReader reader) {
             ushort nameLength = reader.ReadUShort();
             return reader.ReadString(nameLength);
         }
 
         // get the next byte array, prefixed by array length (signed int, 4 bytes)
-        private static NbtByteArray ParseNbtByteArray(NbtByteReader reader, bool parseName = true) {
+        public static NbtByteArray ParseNbtByteArray(NbtByteReader reader, bool parseName = true) {
             NbtByteArray byteArray = new NbtByteArray(parseName ? ParseString(reader) : "");
 
             int arrayLength = reader.ReadInt();
@@ -190,7 +190,7 @@ namespace NBTExplainer {
         }
 
         // get the next list, prefixed by tag type (1 byte) and array length (signed int, 4 bytes). all elements of TAG_List are not prefixed by tag type or name
-        private static NbtList ParseNbtList(NbtByteReader reader, bool parseName = true) {
+        public static NbtList ParseNbtList(NbtByteReader reader, bool parseName = true) {
             NbtList list = new NbtList(parseName ? ParseString(reader) : "", reader.ReadTagType());
 
             int listLength = reader.ReadInt();
@@ -202,7 +202,7 @@ namespace NBTExplainer {
         }
 
         // get the next compound
-        private static NbtCompound ParseNbtCompound(NbtByteReader reader, bool parseName = true) {
+        public static NbtCompound ParseNbtCompound(NbtByteReader reader, bool parseName = true) {
             NbtCompound compound = new NbtCompound(parseName ? ParseString(reader) : "");
 
             int nextType = reader.PeekNext();
@@ -218,7 +218,7 @@ namespace NBTExplainer {
         }
 
         // get the next int array, prefixed by array length (signed int, 4 bytes)
-        private static NbtIntArray ParseNbtIntArray(NbtByteReader reader, bool parseName = true) {
+        public static NbtIntArray ParseNbtIntArray(NbtByteReader reader, bool parseName = true) {
             NbtIntArray intArray = new NbtIntArray(parseName ? ParseString(reader) : "");
 
             int arrayLength = reader.ReadInt();
@@ -230,7 +230,7 @@ namespace NBTExplainer {
         }
 
         // get the next long array, prefixed by array length (signed int, 4 bytes)
-        private static NbtLongArray ParseNbtLongArray(NbtByteReader reader, bool parseName = true) {
+        public static NbtLongArray ParseNbtLongArray(NbtByteReader reader, bool parseName = true) {
             NbtLongArray longArray = new NbtLongArray(parseName ? ParseString(reader) : "");
 
             int arrayLength = reader.ReadInt();
